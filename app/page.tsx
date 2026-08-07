@@ -1,9 +1,14 @@
-import { listExperiences } from "@/lib/db";
-import ExperienceBoard from "@/components/ExperienceBoard";
+import { getSettings } from "@/lib/settings";
+import { listExperiences, listReviews } from "@/lib/db";
+import HomeContent from "@/components/HomeContent";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const experiences = await listExperiences();
-  return <ExperienceBoard initialExperiences={experiences} />;
+  const [settings, experiences, reviews] = await Promise.all([
+    getSettings(),
+    listExperiences(),
+    listReviews(),
+  ]);
+  return <HomeContent initialSettings={settings} experiences={experiences} reviews={reviews} />;
 }
