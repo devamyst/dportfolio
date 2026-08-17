@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Check, Copy, ExternalLink, Github, MessageCircle, Pencil, Plus, Trash2 } from "lucide-react";
+import { Check, Copy, ExternalLink, Github, MessageCircle, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import type { Experience } from "@/lib/db";
 import { withProtocol } from "@/lib/url";
 import Reveal from "./Reveal";
@@ -19,6 +19,8 @@ type FormState = {
   tags: string;
   sort_order: number;
   role: string;
+  rating: number;
+  review_screenshot_url: string;
   server_ip: string;
   discord_url: string;
   start_date: string;
@@ -53,6 +55,8 @@ const EMPTY_FORM: FormState = {
   tags: "",
   sort_order: 0,
   role: "",
+  rating: 0,
+  review_screenshot_url: "",
   server_ip: "",
   discord_url: "",
   start_date: "",
@@ -66,7 +70,7 @@ export default function ProjectsSection({
   heading,
 }: {
   initialExperiences: Experience[];
-  filterType: "plugin" | "server";
+  filterType: "plugin" | "server" | "commission";
   heading: string;
 }) {
   const { status } = useSession();
@@ -110,6 +114,19 @@ export default function ProjectsSection({
     }
   }
 
+  async function handleReviewScreenshotSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadFile(file);
+      if (url) setForm((f) => ({ ...f, review_screenshot_url: url }));
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  }
+
   async function submitForm(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -123,8 +140,8 @@ export default function ProjectsSection({
         tags: form.tags,
         sort_order: form.sort_order,
         role: form.role,
-        rating: null,
-        review_screenshot_url: null,
+        rating: form.rating || null,
+        review_screenshot_url: form.review_screenshot_url,
         server_ip: form.server_ip,
         discord_url: form.discord_url,
         start_date: form.start_date,
@@ -167,6 +184,8 @@ export default function ProjectsSection({
       tags: exp.tags,
       sort_order: exp.sort_order,
       role: exp.role ?? "",
+      rating: exp.rating ?? 0,
+      review_screenshot_url: exp.review_screenshot_url ?? "",
       server_ip: exp.server_ip ?? "",
       discord_url: exp.discord_url ?? "",
       start_date: exp.start_date ?? "",
@@ -228,6 +247,14 @@ export default function ProjectsSection({
                 className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm"
               />
             )}
+            {filterType === "commission" && (
+              <input
+                value={form.role}
+                onChange={(e) => setForm({ ...form, role: e.target.value })}
+                placeholder="Client / for who (optional)"
+                className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm"
+              />
+            )}
             <input
               value={form.link}
               onChange={(e) => setForm({ ...form, link: e.target.value })}
@@ -281,6 +308,57 @@ export default function ProjectsSection({
                 placeholder="Status (e.g. Active, Resigned, Removed)"
                 className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm"
               />
+            )}
+
+            {filterType === "commission" && (
+              <div>
+                <label className="mb-1 block text-xs text-neutral-400">Rating</label>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() =>
+                        setForm({ ...form, rating: form.rating === i ? 0 : i })
+                      }
+                    >
+                      <Star
+                        className={
+                          i <= form.rating
+                            ? "h-5 w-5 fill-accent text-accent"
+                            : "h-5 w-5 text-neutral-600"
+                        }
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {filterType === "commission" && (
+              <div>
+                <label className="mb-1 block text-xs text-neutral-400">
+                  Review screenshot (optional)
+                </label>
+                <div className="flex items-center gap-3">
+                  {form.review_screenshot_url && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={form.review_screenshot_url}
+                      alt=""
+                      className="h-12 w-12 rounded-lg border border-border object-cover"
+                    />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/gif"
+                    onChange={handleReviewScreenshotSelect}
+                    disabled={uploading}
+                    className="text-sm text-neutral-400 file:mr-3 file:rounded-lg file:border file:border-border file:bg-bg file:px-3 file:py-1.5 file:text-sm file:text-neutral-300"
+                  />
+                  {uploading && <span className="text-xs text-neutral-500">uploading…</span>}
+                </div>
+              </div>
             )}
 
             <div>
@@ -352,6 +430,20 @@ export default function ProjectsSection({
                               {exp.role}
                             </span>
                           )}
+                          {exp.type === "commission" && exp.rating != null && (
+                            <div className="flex items-center gap-0.5">
+                              {[1, 2, 3, 4, 5].map((i) => (
+                                <Star
+                                  key={i}
+                                  className={
+                                    i <= exp.rating!
+                                      ? "h-3.5 w-3.5 fill-accent text-accent"
+                                      : "h-3.5 w-3.5 text-neutral-600"
+                                  }
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -380,6 +472,21 @@ export default function ProjectsSection({
                         </span>
                       ))}
                     </div>
+                  )}
+                  {exp.type === "commission" && exp.review_screenshot_url && (
+                    <a
+                      href={exp.review_screenshot_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 block w-fit"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={exp.review_screenshot_url}
+                        alt=""
+                        className="max-h-40 rounded-lg border border-border object-cover"
+                      />
+                    </a>
                   )}
                   <DateRangeBar start={exp.start_date} end={exp.end_date} status={exp.status} />
                   <div className="flex flex-wrap gap-3">

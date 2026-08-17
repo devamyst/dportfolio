@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     typeof body.title !== "string" ||
     !body.title.trim() ||
     typeof body.description !== "string" ||
-    (body.type !== "plugin" && body.type !== "server")
+    (body.type !== "plugin" && body.type !== "server" && body.type !== "commission")
   ) {
     return NextResponse.json({ error: "invalid body" }, { status: 400 });
   }

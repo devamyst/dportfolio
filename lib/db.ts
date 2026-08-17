@@ -18,6 +18,8 @@ async function runInit(): Promise<void> {
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
+  await sql`ALTER TABLE experiences DROP CONSTRAINT IF EXISTS experiences_type_check`;
+  await sql`ALTER TABLE experiences ADD CONSTRAINT experiences_type_check CHECK (type IN ('plugin', 'server', 'commission'))`;
   await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS role TEXT`;
   await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS rating INTEGER`;
   await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS review_screenshot_url TEXT`;
@@ -47,7 +49,7 @@ function init(): Promise<void> {
 
 export interface Experience {
   id: number;
-  type: "plugin" | "server";
+  type: "plugin" | "server" | "commission";
   title: string;
   description: string;
   link: string | null;
