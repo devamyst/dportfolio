@@ -13,17 +13,17 @@ export default function Timeline({ experiences }: { experiences: Experience[] })
       <Reveal>
         <h2 className="mb-10 text-center text-2xl font-bold text-white">Timeline</h2>
       </Reveal>
-      <div className="relative border-l border-border pl-8">
-        <div className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-accent via-accent/40 to-transparent shadow-[0_0_12px_1px_rgba(59,130,246,0.5)]" />
+      <div className="relative border-l-4 border-black pl-8">
+        <div className="absolute -left-1 top-0 h-full w-1 bg-gradient-to-b from-accent via-accentDark to-transparent" />
         {servers.map((exp, i) => (
           <Reveal key={exp.id} delay={i * 0.08} className="relative mb-10 last:mb-0">
-            <span className="absolute -left-[38px] top-1 h-3 w-3 rounded-full bg-accent shadow-[0_0_10px_2px_rgba(59,130,246,0.7)]" />
+            <span className="absolute -left-[42px] top-1 h-4 w-4 border-2 border-black bg-accent" />
             <div className="flex items-start gap-4">
               <EntryLogo title={exp.title} url={exp.image_url} size="h-12 w-12" />
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   {!exp.start_date && (
-                    <time className="text-xs uppercase tracking-wide text-blue-400">
+                    <time className="text-xs uppercase tracking-wide text-accent3">
                       {new Date(exp.created_at).toLocaleDateString(undefined, {
                         year: "numeric",
                         month: "short",
@@ -31,7 +31,7 @@ export default function Timeline({ experiences }: { experiences: Experience[] })
                     </time>
                   )}
                   {exp.role && (
-                    <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
+                    <span className="border border-accent/40 bg-accent/10 px-2 py-0.5 font-pixel text-xs text-accent">
                       {exp.role}
                     </span>
                   )}
@@ -56,7 +56,7 @@ export default function Timeline({ experiences }: { experiences: Experience[] })
                 {(exp.server_ip || exp.discord_url) && (
                   <div className="mt-2 flex flex-wrap items-center gap-3">
                     {exp.server_ip && (
-                      <p className="font-mono text-xs text-neutral-500">{exp.server_ip}</p>
+                      <p className="font-mono text-base text-neutral-400">{exp.server_ip}</p>
                     )}
                     {exp.discord_url && (
                       <a

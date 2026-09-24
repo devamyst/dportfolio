@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Quote } from "lucide-react";
 import type { Review } from "@/lib/db";
 
 export default function ReviewsMarquee({ reviews }: { reviews: Review[] }) {
@@ -38,7 +37,7 @@ export default function ReviewsMarquee({ reviews }: { reviews: Review[] }) {
   return (
     <div
       className={`group relative mx-auto mb-16 overflow-hidden ${
-        boxed ? "glass glow-border rounded-2xl border border-border" : "w-full"
+        boxed ? "glass glow-border" : "w-full"
       }`}
       style={boxed && boxWidth ? { width: boxWidth } : undefined}
     >
@@ -51,11 +50,11 @@ export default function ReviewsMarquee({ reviews }: { reviews: Review[] }) {
         {loop.map((r, i) => (
           <div
             key={`${r.id}-${i}`}
-            className="glass flex w-72 shrink-0 flex-col rounded-2xl border border-border p-5"
+            className="mc-tooltip flex w-72 shrink-0 flex-col p-5"
           >
-            <Quote className="h-5 w-5 shrink-0 text-accent/40" />
+            <span className="font-pixel text-sm text-accent2">★★★★★</span>
             <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-neutral-300">{r.text}</p>
-            {r.author && <span className="mt-3 text-xs font-medium text-neutral-500">{r.author}</span>}
+            {r.author && <span className="mt-3 font-pixel text-xs text-enchant">{r.author}</span>}
           </div>
         ))}
       </div>

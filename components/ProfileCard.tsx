@@ -21,7 +21,7 @@ export default function ProfileCard({
 }) {
   return (
     <Reveal className="mx-auto mb-24 max-w-3xl px-6" delay={0.3}>
-      <TiltCard className="glass glow-border rounded-3xl p-8">
+      <TiltCard className="glass glow-border p-8">
         <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-start">
           <div className="relative shrink-0">
             {avatarUrl ? (
@@ -29,21 +29,23 @@ export default function ProfileCard({
               <img
                 src={avatarUrl}
                 alt=""
-                className="h-20 w-20 rounded-2xl border border-border object-cover"
+                className="h-20 w-20 border-2 border-black object-cover"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-2xl font-bold text-white">
+              <div className="mc-slot-dark flex h-20 w-20 items-center justify-center font-pixel text-2xl text-accent">
                 D
               </div>
             )}
             <span
-              className={`absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-surface ${
+              className={`absolute -bottom-1 -right-1 h-4 w-4 border-2 border-black ${
                 status ? STATUS_COLOR[status] : "bg-green-400"
               }`}
             />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-white">Devamy</h2>
+            <h2 className="font-pixel text-xl text-white">
+              Devamy <span className="text-sm text-accent2">Lvl {new Date().getFullYear() - 2019}</span>
+            </h2>
             <p className="mt-3 text-sm leading-relaxed text-neutral-400">{bio1}</p>
             <p className="mt-3 text-sm leading-relaxed text-neutral-400">{bio2}</p>
           </div>

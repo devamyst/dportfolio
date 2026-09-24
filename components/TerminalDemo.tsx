@@ -15,18 +15,18 @@ function buildScript(settings: Settings, experiences: Experience[]) {
     .join(" · ");
 
   const script: { cmd: string; output: string[] }[] = [
-    { cmd: "whoami", output: [`${settings.hero_title} — ${settings.hero_subtitle}`] },
-    { cmd: "cat skills.txt", output: [skills || "no skills listed yet"] },
+    { cmd: "/whoami", output: [`${settings.hero_title} — ${settings.hero_subtitle}`] },
+    { cmd: "/skills", output: [skills || "no skills listed yet"] },
   ];
   if (projects.length > 0) {
-    script.push({ cmd: "ls projects/", output: [projects.join(", ")] });
+    script.push({ cmd: "/plugins list", output: [projects.join(", ")] });
   }
   if (servers.length > 0) {
-    script.push({ cmd: "ls servers/", output: [servers.join(", ")] });
+    script.push({ cmd: "/servers list", output: [servers.join(", ")] });
   }
   script.push({
-    cmd: "./deploy.sh --prod",
-    output: ["Building...     done", "Deploying...    done", `Live · ${settings.stat_downloads} downloads · ${settings.stat_years} years experience`],
+    cmd: "/plm reload portfolio",
+    output: ["Unloading portfolio... done", "Loading portfolio... done", `Enabled · ${settings.stat_downloads} downloads · ${settings.stat_years} years experience`],
   });
   return script;
 }
@@ -101,28 +101,25 @@ export default function TerminalDemo({
 
   return (
     <Reveal className="w-full">
-      <div className="glass glow-border overflow-hidden rounded-2xl">
-        <div className="flex items-center gap-2 border-b border-border/60 bg-surface2/80 px-4 py-3">
-          <span className="h-3 w-3 rounded-full bg-red-500/80" />
-          <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
-          <span className="h-3 w-3 rounded-full bg-green-500/80" />
-          <span className="ml-3 text-xs text-neutral-500">devamy@portfolio: ~</span>
+      <div className="glass glow-border overflow-hidden">
+        <div className="flex items-center justify-between border-b-2 border-black bg-surface2 px-4 py-2">
+          <span className="font-pixel text-xs text-neutral-300">Server Console</span>
+          <span className="flex items-center gap-1.5 font-pixel text-xs text-accent">
+            <span className="h-2 w-2 bg-accent" /> 20.0 TPS
+          </span>
         </div>
-        <div ref={scrollRef} className="h-[260px] overflow-y-auto p-5 font-mono text-sm leading-relaxed">
+        <div ref={scrollRef} className="h-[280px] overflow-y-auto bg-black/60 p-4 font-mono text-xl leading-snug">
           {lines.map((line, i) =>
             line.kind === "cmd" ? (
-              <div key={i} className="flex text-neutral-200">
-                <span className="mr-2 shrink-0 text-accent">➜</span>
-                <span className="mr-2 shrink-0 text-accent3">~</span>
+              <div key={i} className="mc-shadow flex text-white">
+                <span className="mr-2 shrink-0 text-accent2">&gt;</span>
                 <span>
                   {line.text}
-                  {i === lines.length - 1 && (
-                    <span className={caret ? "opacity-100" : "opacity-0"}>▌</span>
-                  )}
+                  {i === lines.length - 1 && <span className={caret ? "opacity-100" : "opacity-0"}>_</span>}
                 </span>
               </div>
             ) : (
-              <div key={i} className="pl-6 text-neutral-500">
+              <div key={i} className="mc-shadow pl-5 text-accent3">
                 {line.text}
               </div>
             )

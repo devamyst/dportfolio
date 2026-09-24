@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Pencil, Plus, Quote, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import type { Review } from "@/lib/db";
 import Reveal from "./Reveal";
 import TiltCard from "./TiltCard";
@@ -89,7 +89,7 @@ export default function ReviewsSection({ initialReviews }: { initialReviews: Rev
                 setForm(EMPTY_FORM);
                 setShowForm(true);
               }}
-              className="flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accentDark"
+              className="mc-btn px-4 py-2 text-sm disabled:opacity-50"
             >
               <Plus className="h-4 w-4" /> Add
             </button>
@@ -125,7 +125,7 @@ export default function ReviewsSection({ initialReviews }: { initialReviews: Rev
               <button
                 disabled={busy}
                 type="submit"
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+                className="mc-btn px-4 py-2 text-sm disabled:opacity-50"
               >
                 {form.id ? "Save" : "Create"}
               </button>
@@ -147,12 +147,12 @@ export default function ReviewsSection({ initialReviews }: { initialReviews: Rev
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {reviews.map((r, i) => (
           <Reveal key={r.id} delay={i * 0.05}>
-            <TiltCard className="glass glow-border relative flex h-full flex-col overflow-hidden rounded-2xl p-6">
-              <Quote className="h-6 w-6 text-accent/40" />
+            <TiltCard className="mc-tooltip relative flex h-full flex-col overflow-hidden p-6">
+              <span className="font-pixel text-sm text-accent2">★★★★★</span>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-neutral-300">{r.text}</p>
               {(r.author || isAdmin) && (
-                <div className="mt-5 flex items-center justify-between border-t border-border/60 pt-4">
-                  <span className="text-sm font-medium text-white">{r.author}</span>
+                <div className="mt-5 flex items-center justify-between border-t-2 border-enchant/20 pt-4">
+                  <span className="font-pixel text-sm text-enchant">{r.author}</span>
                   {isAdmin && (
                     <div className="flex shrink-0 gap-3 text-neutral-400">
                       <button onClick={() => edit(r)} className="hover:text-white">

@@ -49,7 +49,7 @@ export default function AuthControl() {
     return (
       <button
         onClick={() => signOut()}
-        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm text-neutral-300 hover:bg-surface"
+        className="mc-btn px-3 py-1.5 text-sm"
       >
         <LogOut className="h-4 w-4" /> Sign out
       </button>
@@ -60,7 +60,7 @@ export default function AuthControl() {
     <div className="relative" ref={rootRef}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm text-neutral-300 hover:bg-surface"
+        className="mc-btn px-3 py-1.5 text-sm"
       >
         <LogIn className="h-4 w-4" /> Sign in
       </button>
@@ -90,7 +90,7 @@ export default function AuthControl() {
           <button
             disabled={busy}
             type="submit"
-            className="w-full rounded-lg bg-accent px-3 py-2 text-sm font-medium text-white disabled:opacity-50"
+            className="mc-btn w-full px-3 py-2 text-sm disabled:opacity-50"
           >
             Sign in
           </button>

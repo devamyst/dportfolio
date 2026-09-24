@@ -206,7 +206,7 @@ export default function ProjectsSection({
                 setForm(EMPTY_FORM);
                 setShowForm(true);
               }}
-              className="flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accentDark"
+              className="mc-btn px-4 py-2 text-sm disabled:opacity-50"
             >
               <Plus className="h-4 w-4" /> Add
             </button>
@@ -393,7 +393,7 @@ export default function ProjectsSection({
               <button
                 disabled={busy}
                 type="submit"
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+                className="mc-btn px-4 py-2 text-sm disabled:opacity-50"
               >
                 {form.id ? "Save" : "Create"}
               </button>

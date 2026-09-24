@@ -41,10 +41,10 @@ export default function ContactSection({
   return (
     <section id="contact" className="mx-auto mb-24 max-w-2xl px-6">
       <Reveal>
-        <h2 className="mb-8 text-center text-2xl font-bold text-white">Get in touch</h2>
+        <h2 className="mb-8 text-center text-2xl font-bold text-white">Send a message</h2>
       </Reveal>
       <Reveal delay={0.1}>
-        <form onSubmit={submit} className="glass glow-border space-y-4 rounded-2xl p-8">
+        <form onSubmit={submit} className="glass glow-border space-y-4 p-8">
           <input
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -72,7 +72,7 @@ export default function ContactSection({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white hover:bg-accentDark"
+            className="mc-btn w-full px-4 py-2.5 text-sm"
           >
             <Send className="h-4 w-4" /> Send message
           </motion.button>
@@ -87,7 +87,7 @@ export default function ContactSection({
               target="_blank"
               rel="noreferrer"
               aria-label={label}
-              className="rounded-full border border-border p-3 text-neutral-400 transition hover:border-accent hover:text-white hover:shadow-[0_0_20px_-4px_rgba(59,130,246,0.7)]"
+              className="mc-btn p-3"
             >
               <Icon className="h-5 w-5" />
             </a>

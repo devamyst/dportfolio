@@ -2,12 +2,7 @@ import TiltCard from "./TiltCard";
 import Reveal from "./Reveal";
 import Counter from "./Counter";
 
-const GRADIENTS = [
-  "from-blue-400 to-blue-600",
-  "from-purple-400 to-purple-600",
-  "from-cyan-300 to-cyan-500",
-  "from-pink-400 to-pink-600",
-];
+const COLORS = ["text-accent", "text-accent2", "text-accent3", "text-enchant"];
 
 export default function StatsSection({
   projectsCount,
@@ -34,14 +29,14 @@ export default function StatsSection({
           <Reveal key={stat.label} delay={i * 0.08}>
             <TiltCard
               max={5}
-              className="glass rounded-2xl p-6 text-center transition-shadow hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.4)]"
+              className="glass glow-border p-6 text-center"
             >
               <div
-                className={`bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]} bg-clip-text text-3xl font-bold text-transparent`}
+                className={`mc-shadow font-pixel text-4xl ${COLORS[i % COLORS.length]}`}
               >
                 <Counter text={stat.text} />
               </div>
-              <div className="mt-2 text-xs text-neutral-400">{stat.label}</div>
+              <div className="mt-2 font-pixel text-xs uppercase tracking-wider text-neutral-400">{stat.label}</div>
             </TiltCard>
           </Reveal>
         ))}

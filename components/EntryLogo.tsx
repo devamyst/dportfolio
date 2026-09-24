@@ -13,13 +13,13 @@ export default function EntryLogo({
       <img
         src={url}
         alt=""
-        className={`${size} shrink-0 rounded-lg border border-border object-cover`}
+        className={`${size} shrink-0 border-2 border-black object-cover`}
       />
     );
   }
   return (
     <div
-      className={`${size} flex shrink-0 items-center justify-center rounded-lg border border-border bg-gradient-to-br from-blue-500/30 to-blue-700/30 text-lg font-bold text-blue-300`}
+      className={`${size} mc-slot-dark mc-shadow flex shrink-0 items-center justify-center border-2 border-black font-pixel text-lg text-accent`}
     >
       {title.charAt(0).toUpperCase() || "?"}
     </div>

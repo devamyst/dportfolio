@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Blocks, Server } from "lucide-react";
 import type { Settings } from "@/lib/settings";
@@ -32,15 +32,20 @@ export default function HomeContent({
   const projectsCount = experiences.filter((e) => e.type === "plugin").length;
   const serversCount = experiences.filter((e) => e.type === "server").length;
   const { data: lanyard, loading: lanyardLoading } = useLanyard();
+  const splashExtras = useMemo(
+    () => experiences.filter((e) => e.type === "server").map((e) => `Also try ${e.title}!`),
+    [experiences]
+  );
 
   return (
     <>
       <EditSitePanel settings={settings} onUpdate={setSettings} />
-      <section className="mx-auto mb-16 grid max-w-6xl grid-cols-1 items-center gap-10 px-6 pt-20 pb-4 lg:grid-cols-2">
+      <section className="mx-auto mb-16 grid max-w-6xl grid-cols-1 items-center gap-10 px-6 pt-16 pb-4 lg:grid-cols-2">
         <Hero
           title={settings.hero_title}
           subtitle={settings.hero_subtitle}
           description={settings.hero_description}
+          splashExtras={splashExtras}
         />
         <TerminalDemo settings={settings} experiences={experiences} />
       </section>
@@ -61,22 +66,26 @@ export default function HomeContent({
       <section className="mx-auto mb-24 grid max-w-5xl grid-cols-1 gap-6 px-6 sm:grid-cols-2">
         <Reveal>
           <Link href="/projects">
-            <TiltCard className="glass glow-border flex items-center gap-4 rounded-2xl p-8">
-              <Blocks className="h-8 w-8 text-accent" />
+            <TiltCard className="glass glow-border flex items-center gap-4 p-6">
+              <span className="mc-slot-dark flex h-14 w-14 shrink-0 items-center justify-center">
+                <Blocks className="h-7 w-7 text-accent" />
+              </span>
               <div>
                 <h3 className="text-lg font-semibold text-white">Projects</h3>
-                <p className="mt-1 text-sm text-neutral-400">Plugins, proxies, and other things I&apos;ve built</p>
+                <p className="mt-1 text-sm text-neutral-400">Singleplayer: plugins, proxies and tools I&apos;ve built</p>
               </div>
             </TiltCard>
           </Link>
         </Reveal>
         <Reveal delay={0.08}>
           <Link href="/servers">
-            <TiltCard className="glass glow-border flex items-center gap-4 rounded-2xl p-8">
-              <Server className="h-8 w-8 text-accent2" />
+            <TiltCard className="glass glow-border flex items-center gap-4 p-6">
+              <span className="mc-slot-dark flex h-14 w-14 shrink-0 items-center justify-center">
+                <Server className="h-7 w-7 text-accent2" />
+              </span>
               <div>
                 <h3 className="text-lg font-semibold text-white">Servers</h3>
-                <p className="mt-1 text-sm text-neutral-400">Servers I&apos;ve worked at</p>
+                <p className="mt-1 text-sm text-neutral-400">Multiplayer: servers I&apos;ve developed for</p>
               </div>
             </TiltCard>
           </Link>
