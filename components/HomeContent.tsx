@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Blocks, Server } from "lucide-react";
+import { Blocks, Hammer, Server } from "lucide-react";
 import type { Settings } from "@/lib/settings";
 import type { Experience, Review } from "@/lib/db";
 import EditSitePanel from "./EditSitePanel";
@@ -86,6 +86,19 @@ export default function HomeContent({
               <div>
                 <h3 className="text-lg font-semibold text-white">Servers</h3>
                 <p className="mt-1 text-sm text-neutral-400">Multiplayer: servers I&apos;ve developed for</p>
+              </div>
+            </TiltCard>
+          </Link>
+        </Reveal>
+        <Reveal delay={0.16} className="sm:col-span-2">
+          <Link href="/commissions">
+            <TiltCard className="glass glow-border flex items-center gap-4 p-6">
+              <span className="mc-slot-dark flex h-14 w-14 shrink-0 items-center justify-center">
+                <Hammer className="h-7 w-7 text-accent3" />
+              </span>
+              <div>
+                <h3 className="text-lg font-semibold text-white">Commissions</h3>
+                <p className="mt-1 text-sm text-neutral-400">Crafting table: custom plugins and systems built to order</p>
               </div>
             </TiltCard>
           </Link>
