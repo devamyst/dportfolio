@@ -1,4 +1,4 @@
-const PIXELS = [
+export const GRASS_PIXELS = [
   "GGgGGGgG",
   "gGGGgGGG",
   "GdGgGdGG",
@@ -9,7 +9,7 @@ const PIXELS = [
   "dDddddDd",
 ];
 
-const FILL: Record<string, string> = {
+export const GRASS_FILL: Record<string, string> = {
   G: "#5dbb3f",
   g: "#4c9a33",
   d: "#866043",
@@ -19,8 +19,8 @@ const FILL: Record<string, string> = {
 export default function GrassBlock({ className = "h-6 w-6" }: { className?: string }) {
   return (
     <svg viewBox="0 0 8 8" className={className} shapeRendering="crispEdges" aria-hidden>
-      {PIXELS.flatMap((row, y) =>
-        [...row].map((c, x) => <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={FILL[c]} />)
+      {GRASS_PIXELS.flatMap((row, y) =>
+        [...row].map((c, x) => <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={GRASS_FILL[c]} />)
       )}
     </svg>
   );

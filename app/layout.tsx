@@ -10,9 +10,16 @@ import "./globals.css";
 const pixel = Pixelify_Sans({ subsets: ["latin"], variable: "--font-pixel", display: "swap" });
 const mono = VT323({ subsets: ["latin"], weight: "400", variable: "--font-mono", display: "swap" });
 
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Devamy",
+  metadataBase: new URL(siteUrl),
+  title: { default: "Devamy", template: "%s · Devamy" },
   description: "Minecraft plugins, servers and commissions by Devamy",
+  openGraph: { siteName: "Devamy", type: "website" },
+  twitter: { card: "summary_large_image" },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

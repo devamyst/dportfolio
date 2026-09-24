@@ -75,9 +75,7 @@ export function activityImageUrl(activity: LanyardActivity, key: "large_image" |
 
 export async function fetchLanyard(): Promise<LanyardData | null> {
   try {
-    const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`, {
-      cache: "no-store",
-    });
+    const res = await fetch("/api/lanyard", { cache: "no-store" });
     if (!res.ok) return null;
     const json = await res.json();
     return json.success ? (json.data as LanyardData) : null;

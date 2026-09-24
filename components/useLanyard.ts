@@ -16,10 +16,9 @@ export function useLanyard(): { data: LanyardData | null; loading: boolean } {
     let cancelled = false;
 
     fetchLanyard().then((initial) => {
-      if (!cancelled && initial) {
-        setData(initial);
-        setLoading(false);
-      }
+      if (cancelled) return;
+      if (initial) setData(initial);
+      setLoading(false);
     });
 
     function startPolling() {

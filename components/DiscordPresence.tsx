@@ -43,7 +43,9 @@ export default function DiscordPresence({
     return () => clearInterval(id);
   }, []);
 
-  if (loading || !data) {
+  if (!loading && !data) return null;
+
+  if (!data) {
     return (
       <section className="mx-auto mb-24 max-w-3xl px-6">
         <Reveal>
