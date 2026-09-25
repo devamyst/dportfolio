@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+import { revalidatePath } from "next/cache";
 
 const sql = neon(process.env.POSTGRES_URL || process.env.DATABASE_URL || "");
 
@@ -51,5 +52,6 @@ export async function updateSettings(partial: Partial<Settings>): Promise<Settin
       ON CONFLICT (key) DO UPDATE SET value = ${value}
     `;
   }
+  revalidatePath("/", "layout");
   return getSettings();
 }

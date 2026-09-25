@@ -416,7 +416,7 @@ export default function ProjectsSection({
         {visible.map((exp, i) => {
           const isGithub = exp.link?.includes("github.com");
           return (
-            <Reveal key={exp.id} delay={i * 0.05}>
+            <Reveal key={exp.id} delay={(i % 2) * 0.05}>
               <TiltCard className="glass glow-border flex h-full flex-col overflow-hidden rounded-2xl">
                 <div className="flex flex-1 flex-col p-6">
                   <div className="mb-3 flex items-start justify-between gap-3">

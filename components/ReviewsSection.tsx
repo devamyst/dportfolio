@@ -146,7 +146,7 @@ export default function ReviewsSection({ initialReviews }: { initialReviews: Rev
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {reviews.map((r, i) => (
-          <Reveal key={r.id} delay={i * 0.05}>
+          <Reveal key={r.id} delay={(i % 3) * 0.05}>
             <TiltCard className="mc-tooltip relative flex h-full flex-col overflow-hidden p-6">
               <span className="font-pixel text-sm text-accent2">★★★★★</span>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-neutral-300">{r.text}</p>

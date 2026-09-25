@@ -11,7 +11,7 @@ export default function SkillsSection({ skills }: { skills: string }) {
       </Reveal>
       <div className="flex flex-wrap justify-center gap-3">
         {list.map((skill, i) => (
-          <Reveal key={skill} delay={i * 0.03}>
+          <Reveal key={skill} delay={Math.min(i, 10) * 0.02}>
             <SkillBadge label={skill} index={i} />
           </Reveal>
         ))}

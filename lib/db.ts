@@ -1,43 +1,50 @@
 import { neon } from "@neondatabase/serverless";
+import { revalidatePath } from "next/cache";
 
 const sql = neon(process.env.POSTGRES_URL || process.env.DATABASE_URL || "");
 
 let ready: Promise<void> | null = null;
 
 async function runInit(): Promise<void> {
-  await sql`
-    CREATE TABLE IF NOT EXISTS experiences (
-      id SERIAL PRIMARY KEY,
-      type TEXT NOT NULL CHECK (type IN ('plugin', 'server')),
-      title TEXT NOT NULL,
-      description TEXT NOT NULL,
-      link TEXT,
-      image_url TEXT,
-      tags TEXT NOT NULL DEFAULT '',
-      sort_order INTEGER NOT NULL DEFAULT 0,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    )
-  `;
-  await sql`ALTER TABLE experiences DROP CONSTRAINT IF EXISTS experiences_type_check`;
-  await sql`ALTER TABLE experiences ADD CONSTRAINT experiences_type_check CHECK (type IN ('plugin', 'server', 'commission'))`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS role TEXT`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS rating INTEGER`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS review_screenshot_url TEXT`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS server_ip TEXT`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS discord_url TEXT`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS start_date TEXT`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS end_date TEXT`;
-  await sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS status TEXT`;
-  await sql`
-    CREATE TABLE IF NOT EXISTS reviews (
-      id SERIAL PRIMARY KEY,
-      author TEXT,
-      text TEXT NOT NULL,
-      sort_order INTEGER NOT NULL DEFAULT 0,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    )
-  `;
-  await sql`ALTER TABLE reviews ALTER COLUMN author DROP NOT NULL`;
+  await sql.transaction([
+    sql`
+      CREATE TABLE IF NOT EXISTS experiences (
+        id SERIAL PRIMARY KEY,
+        type TEXT NOT NULL CHECK (type IN ('plugin', 'server')),
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        link TEXT,
+        image_url TEXT,
+        tags TEXT NOT NULL DEFAULT '',
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      )
+    `,
+    sql`ALTER TABLE experiences DROP CONSTRAINT IF EXISTS experiences_type_check`,
+    sql`ALTER TABLE experiences ADD CONSTRAINT experiences_type_check CHECK (type IN ('plugin', 'server', 'commission'))`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS role TEXT`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS rating INTEGER`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS review_screenshot_url TEXT`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS server_ip TEXT`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS discord_url TEXT`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS start_date TEXT`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS end_date TEXT`,
+    sql`ALTER TABLE experiences ADD COLUMN IF NOT EXISTS status TEXT`,
+    sql`
+      CREATE TABLE IF NOT EXISTS reviews (
+        id SERIAL PRIMARY KEY,
+        author TEXT,
+        text TEXT NOT NULL,
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      )
+    `,
+    sql`ALTER TABLE reviews ALTER COLUMN author DROP NOT NULL`,
+  ]);
+}
+
+function refreshPages(): void {
+  revalidatePath("/", "layout");
 }
 
 function init(): Promise<void> {
@@ -87,6 +94,7 @@ export async function createExperience(input: ExperienceInput): Promise<Experien
             ${input.start_date}, ${input.end_date}, ${input.status})
     RETURNING *
   `;
+  refreshPages();
   return rows[0] as Experience;
 }
 
@@ -105,12 +113,14 @@ export async function updateExperience(
     WHERE id = ${id}
     RETURNING *
   `;
+  refreshPages();
   return rows[0] as Experience | undefined;
 }
 
 export async function deleteExperience(id: number): Promise<void> {
   await init();
   await sql`DELETE FROM experiences WHERE id = ${id}`;
+  refreshPages();
 }
 
 export interface Review {
@@ -138,6 +148,7 @@ export async function createReview(input: ReviewInput): Promise<Review> {
     VALUES (${input.author}, ${input.text}, ${input.sort_order})
     RETURNING *
   `;
+  refreshPages();
   return rows[0] as Review;
 }
 
@@ -151,10 +162,12 @@ export async function updateReview(
     WHERE id = ${id}
     RETURNING *
   `;
+  refreshPages();
   return rows[0] as Review | undefined;
 }
 
 export async function deleteReview(id: number): Promise<void> {
   await init();
   await sql`DELETE FROM reviews WHERE id = ${id}`;
+  refreshPages();
 }

@@ -16,7 +16,7 @@ export default function Timeline({ experiences }: { experiences: Experience[] })
       <div className="relative border-l-4 border-black pl-8">
         <div className="absolute -left-1 top-0 h-full w-1 bg-gradient-to-b from-accent via-accentDark to-transparent" />
         {servers.map((exp, i) => (
-          <Reveal key={exp.id} delay={i * 0.08} className="relative mb-10 last:mb-0">
+          <Reveal key={exp.id} delay={Math.min(i, 2) * 0.05} className="relative mb-10 last:mb-0">
             <span className="absolute -left-[42px] top-1 h-4 w-4 border-2 border-black bg-accent" />
             <div className="flex items-start gap-4">
               <EntryLogo title={exp.title} url={exp.image_url} size="h-12 w-12" />

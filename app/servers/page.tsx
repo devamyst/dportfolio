@@ -2,7 +2,7 @@ import { listExperiences } from "@/lib/db";
 import ProjectsSection from "@/components/ProjectsSection";
 import Timeline from "@/components/Timeline";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function ServersPage() {
   const experiences = await listExperiences();
